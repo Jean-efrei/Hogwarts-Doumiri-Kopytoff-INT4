@@ -1,3 +1,12 @@
+def welcome_message():
+   print("Welcome to Hogward. I'm Professor Dumbledore.")
+   input()
+
+def enter_common_room(character):
+    print("Entering the common room...")
+    input()
+
+
 from utils.input_utils import ask_choice
 
 
