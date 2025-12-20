@@ -1,4 +1,4 @@
-from utils.input_utils import ask_text, ask_number
+from utils.input_utils import *
 from universe.character import init_character, display_character
 
 
@@ -36,21 +36,44 @@ if __name__ == "__main__":
     hero = create_character()
 
 def receive_letter():
-
     print("An owl flies through the window, delivering a letter sealed with the Hogwarts crest...")
-    print("“Dear Student,")
-    print("We are pleased to inform you that you have been accepted to Hogwarts")
-    print("School of Witchcraft and Wizardry!”\n")
+    text = """ Dear student,
+          We are pleased to inform you that you have been accepted at Hogwarts School of Witchcraft and Wizardry.
+          Please find enclosed a list of all necessary books and equipment.
+          Term begins on 1 September. We await your owl by no later than 31 July.
+          Yours sincerely,
+          Minerva McGonagall """
+    print(text)
+    print("Do you accept this invitation and go to Hogwarts ?")
+    print("1 : Yes of course")
+    print("2 : No, what is that weird letter, Wizards don't exist")
+    x = ask_choice("Your choice:", ["1", "2"])
+    if x == "1":
+        print("A strange feeling browses your entire body, it's the beginning of a great adventure. ")
+    else:
+        print("You tear up your letter, and throw it into the fire place, Uncle Vernon cheers : Finally someone normal in this house !")
+        print("The magical world will never hear about, what a wast of magic ! GAME OVER")
 
-    choice = ask_choice("Do you accept this invitation and go to Hogwarts?",["Yes, of course!", "No, I'd rather stay with Uncle Vernon..."])
+def meet_hagrid(character) :
+    print("Hagrid: Hello Harry! I’m here to help you with your shopping on Diagon Alley.")
+    print("Do you want to follow Hagrid?")
+    print("1 : yes")
+    print("2 : no")
+    x = ask_choice("Your choice:", ["1", "2"])
+    if x == "1":
+        print("Hagrid smiles : Well, follow me, ", character["First Name"])
+    else:
+        print("Hagrid stops : I'm sorry... but I have to insist, after you")
 
-    if choice == "No, I'd rather stay with Uncle Vernon...":
-        print("You tear up the letter, and Uncle Vernon cheers:")
-        print("“EXCELLENT! Finally, someone NORMAL in this house!”")
-        print("The magical world will never know you existed... Game over.")
-        exit(0)
-    print("\nYou clutch the letter tightly. Your life will never be the same again...")
 
+def buy_supplies(character):
+    inventory = load_file("data/inventory.json")
+    print("Catalog of available items : ")
+    for key,value in inventory.items():
+        join_catalog = " - ".join(value)
+        print(inventory[key], ".", join_catalog, "Galleons, \n")
+    print("You have ", character["Money"], "Galleons.")
+    print("Remaining required items: " )
 
 
 

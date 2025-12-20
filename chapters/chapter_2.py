@@ -1,14 +1,7 @@
-def welcome_message():
-   print("Welcome to Hogward. I'm Professor Dumbledore.")
-   input()
 
-def enter_common_room(character):
-    print("Entering the common room...")
-    input()
-
-
-from utils.input_utils import ask_choice
-
+from utils.input_utils import ask_choice, load_file
+from universe.house import assign_house
+import json
 
 def meet_friends(character):
     print("You board the Hogwarts Express. The train slowly departs northward... A red-haired boy enters your compartment, looking friendly.")
@@ -19,8 +12,10 @@ def meet_friends(character):
     x = ask_choice ("Your choice:", ["1", "2"])
     if x == "1":
         print("Ron smiles: — Awesome! You'll see, Hogwarts is amazing!")
+        character["Attributes"]["Loyalty"] += 1
     else:
         print("Okay, I'll get another seat, see you !")
+        character["Attributes"]["Ambition"] += 1
     print("A girl enters next, already carrying a stack of books.")
     print("Hello, I'm Hermione Granger. Have you ever read 'A History of Magic'?")
     print("How do you respond?")
@@ -28,8 +23,10 @@ def meet_friends(character):
     print("2. Uh… no, I prefer adventures over books.")
     y = ask_choice("Your choice:", ["1", "2"])
     if y == "1" :
+        character["Attributes"]["Intelligence"] += 1
         print("Hermione smiles, impressed: — Oh, that's rare! You must be very clever!")
     else:
+        character["Attributes"]["Courage"] += 1
         print("Seriously ? You looked smarter when I saw you by the window. Do you really think you can become an Auror without books ?")
     print("Then a blonde boy enters, looking arrogant.")
     print("I'm Draco Malfoy. It's best to choose your friends carefully from the start, don't you think?")
@@ -39,16 +36,21 @@ def meet_friends(character):
     print("3. Respond with arrogance.")
     z = ask_choice("Your choice:", ["1", "2", "3"])
     if z == "1":
+        character["Attributes"]["Ambition"] += 1
         print("I hope we'll be together in Slytherin !")
     elif z == "2":
+        character["Attributes"]["Loyalty"] += 1
         print("Draco frowns, annoyed. — You'll regret that!")
     else:
+        character["Attributes"]["Courage"] += 1
         print("HOW DARE YOU ? DO YOU KNOW WHO IS MY FATHER ?")
     print("The train continues its journey. Hogwarts Castle appears on the horizon...")
     print ("Your choices already say a lot about your personality!")
 
 
-#def welcome_message()
+def welcome_message():
+   print("Professor Dumbledore : Good evening dear students. Before we begin our banquet, I would like to say a few words. And here they are: Nitwit! Blubber! Oddment! Tweak! Thank you. You will see, Hogwarts is a place where memories are made. Where all of you will become great wizards over the course of these seven years. Welcome again and Bon appétit ! ")
+   input()
 
 
 def sorting_ceremony(character):
@@ -70,28 +72,26 @@ def sorting_ceremony(character):
         )
     ]
     print("The sorting ceremony begins in the Great Hall... The Sorting Hat observes you for a long time before asking its questions:")
-    print(questions[0][0])
-    print("1 :",questions[0][1][0])
-    print("2 :",questions[0][1][1])
-    print("3 :",questions[0][1][2])
-    print("4 :",questions[0][1][3])
-    x = int(input("Your choice :"))
-    print(questions[1][0])
-    print("1 :",questions[1][1][0])
-    print("2 :",questions[1][1][1])
-    print("3 :",questions[1][1][2])
-    print("4 :",questions[1][1][3])
-    y = int(input("Your choice :"))
-    print(questions[2][0])
-    print("1 :",questions[2][1][0])
-    print("2 :",questions[2][1][1])
-    print("3 :",questions[2][1][2])
-    print("4 :",questions[2][1][3])
-    z = int(input("Your choice :"))
+    assign_house(character, questions)
     #call the function assign_houses to choose the function
 
 
 def enter_common_room(character):
+    my_house = sorting_ceremony(character)
+    house = load_file("data/houses.json")
+    print("You follow the prefects through the castle corridors...")
+    print(house[my_house]["emoji"], " ",house[my_house]["description"])
+    print(house[my_house]["installation_message"])
+    colors = ", ".join(house[my_house]["colors"])
+    print("Your house is: ", colors)
 
 
-
+def start_chapter_2(character) :
+    meet_friends(character)
+    welcome_message()
+    sorting_ceremony(character)
+    enter_common_room(character)
+    print("Summary of your information :", character)
+    text = """
+    Wonderful, you're now an official Hogwarts student ! Have fun discovering the castle and all its secrets, but watch out ! Beware the forbidden forest, word is getting around that dangerous creatures live in there... I wouldn't go that way if I were you... 
+    """
