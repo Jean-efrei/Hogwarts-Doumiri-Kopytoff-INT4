@@ -1,31 +1,39 @@
-dico={"Last Name":"","First Name":"","Middle Name": "","Money":"","Inventory":"","Spells":"","Attributes":""}
+def init_character(last_name, first_name, attributes):
+    character = {
+        "Last Name": last_name,
+        "First Name": first_name,
+        "Money": 100,
+        "Inventory": [],
+        "Spells": [],
+        "Attributes": attributes
+    }
+    return character
 
-last_name= dico["Last Name"]
-first_name = dico["First Name"]
-middle_name = dico["Middle Name"]
-money = dico["Money"]
-inventory = dico["Inventory"]
-spells = dico["Spells"]
-attributes = dico["Attributes"]
 
+def display_character(character):
+    print("Character profile:")
+    for cle, val in character.items():
+        print(f"{cle}:", end=" ")
 
-def display_character():
-    print(dico)
-    print(last_name)
-    print(first_name)
-    print(middle_name)
-    print(money)
-    print(inventory)
-    print(spells)
-    print(attributes)
+        if isinstance(val, dict):
+            print()
+            for sub_cle, sub_val in val.items():
+                print(f"  - {sub_cle}: {sub_val}")
+        elif isinstance(val, list):
+            if val:
+                print(", ".join(map(str, val)))
+            else:
+                print("empty")
+        else:
+            print(val)
+
 
 def modify_money(character, amount):
     character["Money"]=character["Money"]+amount
 
 def add_item(character, key, item):
-    character[key]=item
-    for char in character:
-        item.append(character[char])
+    if key in ["Inventory", "Spells"]:
+        character[key].append(item)
 
 
 
