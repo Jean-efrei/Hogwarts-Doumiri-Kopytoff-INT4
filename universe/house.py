@@ -44,31 +44,48 @@ def assign_house(character, questions):
     scores["Hufflepuff"] = scores["Hufflepuff"] + character.get("loyalty", 0) * 2
     scores["Ravenclaw"] = scores["Ravenclaw"] + character.get("intelligence", 0) * 2
 
-
     for question, choices, houses in questions:
         print(question)
+
         index = 1
         for choice in choices:
             print(str(index) + ". " + choice)
             index = index + 1
 
         valid = False
-        while not valid:
-            try:
-                answer = int(input("Your choice: "))
+        answer = 0
+
+        while valid == False:
+            user_input = input("Your choice: ")
+
+            if user_input.isdigit():
+                answer = int(user_input)
                 if answer >= 1 and answer <= len(choices):
-                    chosen_house = houses[answer - 1]
-                    scores[chosen_house] = scores[chosen_house] + 3
                     valid = True
                 else:
                     print("Please choose a valid option.")
+            else:
+                print("Please enter a number.")
+
+        chosen_house = houses[answer - 1]
+        scores[chosen_house] = scores[chosen_house] + 3
+
 
     print("\nSummary of scores:")
     for house in scores:
         print(house + ": " + str(scores[house]) + " points")
 
-    final_house = max(scores, key=scores.get)
+
+    final_house = ""
+    best_score = -1
+
+    for house in scores:
+        if scores[house] > best_score:
+            best_score = scores[house]
+            final_house = house
+
     return final_house
+
 
 
 
