@@ -80,3 +80,9 @@ def sorting_ceremony(character):
     print("4 :",questions[2][1][3])
     z = int(input("Your choice :"))
     #call the function assign_houses to choose the function
+
+
+def enter_common_room(character):
+
+
+
