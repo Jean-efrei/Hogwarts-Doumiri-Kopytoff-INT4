@@ -1,13 +1,13 @@
+from utils.input_utils import ask_choice, load_file
+from universe.house import assign_house
+import json
+
 def welcome_message():
    print("Welcome to Hogward. I'm Professor Dumbledore.")
    input()
 
-def enter_common_room(character):
-    print("Entering the common room...")
-    input()
 
 
-from utils.input_utils import ask_choice
 
 
 def meet_friends(character):
@@ -48,9 +48,6 @@ def meet_friends(character):
     print ("Your choices already say a lot about your personality!")
 
 
-#def welcome_message()
-
-
 def sorting_ceremony(character):
     questions = [
         (
@@ -88,4 +85,22 @@ def sorting_ceremony(character):
     print("3 :",questions[2][1][2])
     print("4 :",questions[2][1][3])
     z = int(input("Your choice :"))
-    #call the function assign_houses to choose the function
+
+def enter_common_room(character):
+    my_house = sorting_ceremony
+    house = load_file("data/houses.json")
+    print("You follow the prefects through the castle corridors...")
+    print(house[my_house]["emoji"], " ",house[my_house]["description"])
+    print(house[my_house]["installation_message"])
+    colors = ", ".join(house[my_house]["colors"])
+    print("Your house is: ", colors)
+
+def start_chapter_2(character) :
+    meet_friends(character)
+    welcome_message()
+    sorting_ceremony(character)
+    enter_common_room(character)
+    print("Summary of your information :", character)
+    text = """
+    Wonderful, you're now an official Hogwarts student ! Have fun discovering the castle and all its secrets, but watch out ! Beware the forbidden forest, word is getting around that dangerous creatures live in there... I wouldn't go that way if I were you... 
+    """

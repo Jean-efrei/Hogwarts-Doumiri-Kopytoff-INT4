@@ -12,18 +12,30 @@ def init_character(last_name, first_name, attributes):
 
 def display_character(character):
     print("Character profile:")
-    for cle, val in character.items():
-        print(f"{cle}:", end=" ")
 
-        if isinstance(val, dict):
+    for key in character:
+        val = character[key]
+        print(str(key) + ":", end=" ")
+
+        if type(val) == dict:
             print()
-            for sub_cle, sub_val in val.items():
-                print(f"  - {sub_cle}: {sub_val}")
-        elif isinstance(val, list):
-            if val:
-                print(", ".join(map(str, val)))
-            else:
+            for sub_key in val:
+                sub_val = val[sub_key]
+                print("  - " + str(sub_key) + ": " + str(sub_val))
+
+        elif type(val) == list:
+            if val == []:
                 print("empty")
+            else:
+                elements_str = []
+                for element in val:
+                    elements_str.append(str(element))
+                for i in range(len(elements_str)):
+                    if i < len(elements_str) - 1:
+                        print(elements_str[i] + ",", end=" ")
+                    else:
+                        print(elements_str[i])
+
         else:
             print(val)
 

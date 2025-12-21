@@ -1,5 +1,7 @@
-from utils.input_utils import ask_text, ask_number
+from utils.input_utils import *
 from universe.character import init_character, display_character
+import json
+
 
 
 def introduction():
@@ -52,13 +54,25 @@ def receive_letter():
     print("\nYou clutch the letter tightly. Your life will never be the same again...")
 
 
+def meet_hagrid(character) :
+    print("Hagrid: Hello Harry! I’m here to help you with your shopping on Diagon Alley.")
+    print("Do you want to follow Hagrid?")
+    print("1 : yes")
+    print("2 : no")
+    x = ask_choice("Your choice:", ["1", "2"])
+    if x == "1":
+        print("Hagrid smiles : Well, follow me, ", character["First Name"])
+    else:
+        print("Hagrid stops : I'm sorry... but I have to insist, after you")
 
 
-
-
-
-
-
-
+def buy_supplies(character):
+    inventory = load_file("data/inventory.json")
+    print("Catalog of available items : ")
+    for key,value in inventory.items():
+        join_catalog = " - ".join(value)
+        print(inventory[key], ".", join_catalog, "Galleons, \n")
+    print("You have ", character["Money"], "Galleons.")
+    print("Remaining required items: " )
 
 
