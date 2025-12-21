@@ -74,15 +74,15 @@ def sorting_ceremony(character):
         )
     ]
     print("The sorting ceremony begins in the Great Hall... The Sorting Hat observes you for a long time before asking its questions:")
-    return assign_house(character, questions)
+    my_house = assign_house(character, questions)
 
 def enter_common_room(character):
-    my_house = sorting_ceremony(character)
+    my_house = character["House"]
     house = load_file("data/houses.json")
     print("You follow the prefects through the castle corridors...")
-    print(house[my_house]["emoji"], " ",house[my_house]["description"])
-    print(house[my_house]["installation_message"])
-    colors = ", ".join(house[my_house]["colors"])
+    print(my_house[house]["emoji"], " ",my_house[house]["description"])
+    print(my_house[house]["installation_message"])
+    colors = ", ".join(my_house[house]["colors"])
     print("Your house is: ", colors)
 
 def start_chapter_2(character) :

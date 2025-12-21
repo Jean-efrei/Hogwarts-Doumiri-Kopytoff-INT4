@@ -1,5 +1,5 @@
 from utils.input_utils import *
-from universe.character import init_character, display_character
+from universe.character import init_character, display_character, modify_money, add_item
 import json
 
 
@@ -56,6 +56,7 @@ def receive_letter(character):
         print(
             "You tear up your letter, and throw it into the fire place, Uncle Vernon cheers : Finally someone normal in this house !")
         print("The magical world will never hear about, what a waste of magic ! GAME OVER")
+        exit()
 
 
 def meet_hagrid(character) :
@@ -72,11 +73,67 @@ def meet_hagrid(character) :
 
 def buy_supplies(character):
     inventory = load_file("data/inventory.json")
+    required_items = ["Magic Wand", "Wizard Robe", "Potions Book"]
+    print("Welcome to the Diagon Alley!\n")
     print("Catalog of available items : ")
     for key,value in inventory.items():
-        join_catalog = " - ".join(value)
-        print(inventory[key], ".", join_catalog, "Galleons, \n")
+        label = "(required)" if value[0] else ""
+        print("{}. {} - {} Galleons {}".format(key, value[0], value[1], label))
+
+    while character["Money"] > 0 and required_items != []:
+        print("You have ", character["Money"], "Galleons.")
+        print("Remaining required items: ", end=' ')
+        for item in required_items:
+            if required_items.index(item) < len(required_items)-1:
+                print(item, end=', ')
+            else :
+                print(item)
+
+        choice = (ask_text("Which item do you want to buy?" ))
+        if inventory[choice][1] > character["Money"] and inventory[choice][0] in required_items:
+            print("You don't have enough money to buy the required item, GAME OVER")
+            exit()
+        elif inventory[choice][0] in required_items :
+            required_items.remove(inventory[choice][0])
+
+        print("You bought: ", choice, "( - ", character[choice][1], ").")
+        modify_money(character, -character[choice][1])
+        add_item(character, "inventory", inventory[choice][0])
+
+    print("All required items have been purchased!")
+    print("It's time to choose your Hogwarts pet!")
     print("You have ", character["Money"], "Galleons.")
-    print("Remaining required items: " )
+    print("Available pets:")
+    pets = ["Owl", "Cat", "Rat", "Toad"]
+    prices = [20, 15, 10, 5]
+    for pet in range(len(pets)):
+        print(f"{pet + 1}, {pets[pet]} - {prices[pet]} Galleons")
+        pet_choice = ask_choice("which pet do you want to buy?", pets)
+        if prices[pet] > character["Money"] :
+            print("You don't have enough money to buy a pet, GAME OVER")
+            exit()
+    modify_money(character, prices[pet])
+    add_item(character, "inventory", pets[pet_choice])
+    print(f"You chose : {pets[pet_choice]} (-{prices[pet_choice]})")
+    print("All required items have been successfully purchased! Here is your final inventory")
+    print("")
+    inventory = ", ".join(character["Inventory"])
+    print(inventory)
+    print("Your character profile:")
+    display_character(character)
+    return character
+
+def start_chapter_1():
+    introduction()
+    character = create_character()
+    receive_letter(character)
+    meet_hagrid(character)
+    buy_supplies(character)
+    print("This is the end of the chapter 1, your adventure in Hogwarts is about to begin !!!")
+    display_character(character)
+    return character
+
+
+
 
 
