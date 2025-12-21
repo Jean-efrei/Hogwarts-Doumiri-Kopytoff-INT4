@@ -3,7 +3,7 @@ from universe.house import assign_house
 import json
 
 def welcome_message():
-   print("Welcome to Hogward. I'm Professor Dumbledore.")
+   print("Welcome to Hogward. I'm Professor Dumbledore. Before we begin our banquet, I would like to say a few words. And here they are: Nitwit! Blubber! Oddment! Tweak! Thank you. You will see, Hogwarts is a place where memories are made, I am sure you will enjoy your time at our school over the next seven years. Welcome again and Bon Appétit !")
    input()
 
 
