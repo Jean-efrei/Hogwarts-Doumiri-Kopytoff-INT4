@@ -1,6 +1,6 @@
-from utils.input_utils import ask_text, ask_number, ask_choice, load_file
-from universe.character import init_character, display_character, modify_money,add_item
-
+from utils.input_utils import *
+from universe.character import init_character, display_character
+import json
 
 
 
@@ -33,144 +33,46 @@ def create_character():
     print("\nCharacter profile:")
     display_character(character)
     return character
-
+if __name__ == "__main__":
+    introduction()
+    hero = create_character()
 
 def receive_letter():
-    print("An owl flies through the window, delivering a letter sealed with the Hogwarts crest...")
-    print("Dear Student,")
-    print("We are pleased to inform you that you have been accepted to Hogwarts")
-    print("School of Witchcraft and Wizardry!")
-    print("")
 
-    choice = ask_choice(
-        "Do you accept this invitation and go to Hogwarts?",
-        ["Yes, of course!", "No, I'd rather stay with Uncle Vernon..."]
-    )
+    print("An owl flies through the window, delivering a letter sealed with the Hogwarts crest...")
+    print("“Dear Student,")
+    print("We are pleased to inform you that you have been accepted to Hogwarts")
+    print("School of Witchcraft and Wizardry!”\n")
+
+    choice = ask_choice("Do you accept this invitation and go to Hogwarts?",["Yes, of course!", "No, I'd rather stay with Uncle Vernon..."])
 
     if choice == "No, I'd rather stay with Uncle Vernon...":
         print("You tear up the letter, and Uncle Vernon cheers:")
-        print("EXCELLENT! Finally, someone NORMAL in this house!")
+        print("“EXCELLENT! Finally, someone NORMAL in this house!”")
         print("The magical world will never know you existed... Game over.")
         exit(0)
+    print("\nYou clutch the letter tightly. Your life will never be the same again...")
 
-    print("You clutch the letter tightly. Your life will never be the same again...")
 
-
-def meet_hagrid(character):
-    print("Hagrid: Hello " + character["First Name"] + "! I’m here to help you with your shopping on Diagon Alley.")
-
-    choice = ask_choice(
-        "Do you want to follow Hagrid?",
-        ["Yes", "No"]
-    )
-
-    if choice == "Yes":
-        print("Hagrid smiles: Well then, follow me!")
+def meet_hagrid(character) :
+    print("Hagrid: Hello Harry! I’m here to help you with your shopping on Diagon Alley.")
+    print("Do you want to follow Hagrid?")
+    print("1 : yes")
+    print("2 : no")
+    x = ask_choice("Your choice:", ["1", "2"])
+    if x == "1":
+        print("Hagrid smiles : Well, follow me, ", character["First Name"])
     else:
-        print("Hagrid gently insists and takes you along anyway!")
+        print("Hagrid stops : I'm sorry... but I have to insist, after you")
+
 
 def buy_supplies(character):
-    inventory_data = load_file("data/inventory.json")
-    required_items = []
-    for item in inventory_data:
-        value = inventory_data[item]
-        if len(value) > 1:
-            if value[1] == "required" or value[1] == True:
-                required_items.append(item)
-
-    print("Welcome to Diagon Alley!")
-    print("Catalog of available items:")
-
-    item_names = []
-    index = 1
-    for item in inventory_data:
-        value = inventory_data[item]
-        price = value[0]
-        if str(price) == price:
-            number = 0
-            i = 0
-            while i < len(price):
-                number = number * 10 + (ord(price[i]) - ord('0'))
-                i = i + 1
-            price = number
-
-        text = str(index) + ". " + item + " - " + str(price) + " Galleons"
-        if len(value) > 1:
-            if value[1] == "required" or value[1] == True:
-                text = text + " (required)"
-        print(text)
-
-        item_names.append(item)
-        index = index + 1
-
-    while required_items != []:
-        print("You have " + str(character["Money"]) + " Galleons.")
-        print("Remaining required items: " + ", ".join(required_items))
-
-        choice = ask_number("Enter the number of the item to buy: ", 1, len(item_names))
-        chosen_item = item_names[choice - 1]
-        value = inventory_data[chosen_item]
-
-        price = value[0]
-        if str(price) == price:
-            number = 0
-            i = 0
-            while i < len(price):
-                number = number * 10 + (ord(price[i]) - ord('0'))
-                i = i + 1
-            price = number
-
-        if character["Money"] < price:
-            print("You do not have enough money. Game over.")
-            exit(0)
-
-        modify_money(character, -price)
-        add_item(character, "Inventory", chosen_item)
-
-        print("You bought: " + chosen_item + " (-" + str(price) + " Galleons).")
-
-        if chosen_item in required_items:
-            required_items.remove(chosen_item)
-
-    print("All required items have been purchased!")
-    print("It's time to choose your Hogwarts pet!")
-
-    pets = [("Owl", 20), ("Cat", 15), ("Rat", 10), ("Toad", 5)]
-
-    print("You have " + str(character["Money"]) + " Galleons.")
-    print("Available pets:")
-
-    i = 1
-    for pet in pets:
-        print(str(i) + ". " + pet[0] + " - " + str(pet[1]) + " Galleons")
-        i = i + 1
-
-    pet_choice = ask_number("Which pet do you want? ", 1, len(pets))
-    pet_name = pets[pet_choice - 1][0]
-    pet_price = pets[pet_choice - 1][1]
-
-    if character["Money"] < pet_price:
-        print("You do not have enough money to buy this pet. Game over.")
-        exit(0)
-
-    modify_money(character, -pet_price)
-    add_item(character, "Inventory", pet_name)
-
-    print("You chose: " + pet_name + " (-" + str(pet_price) + " Galleons).")
-    print("All required items have been successfully purchased!")
-    print("Here is your final inventory:")
-    display_character(character)
-
-
-def start_chapter_1():
-    introduction()
-    character = create_character()
-    receive_letter()
-    meet_hagrid(character)
-    buy_supplies(character)
-
-    print("End of Chapter 1! Your adventure begins at Hogwarts...")
-    return character
-
+    inventory = load_file("data/inventory.json")
+    print("Catalog of available items : ")
+    for key,value in inventory.items():
+        join_catalog = " - ".join(value)
+        print(inventory[key], ".", join_catalog, "Galleons, \n")
+    print("You have ", character["Money"], "Galleons.")
+    print("Remaining required items: " )
 
 
