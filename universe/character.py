@@ -14,30 +14,22 @@ def display_character(character):
     print("Character profile:")
 
     for key in character:
-        val = character[key]
-        print(str(key) + ":", end=" ")
+        value = character[key]
 
-        if type(val) == dict:
-            print()
-            for sub_key in val:
-                sub_val = val[sub_key]
-                print("  - " + str(sub_key) + ": " + str(sub_val))
+        if key == "Attributes":
+            print(key + ":")
+            for sub_key in value:
+                print("- " + str(sub_key) + ": " + str(value[sub_key]))
 
-        elif type(val) == list:
-            if val == []:
-                print("empty")
-            else:
-                elements_str = []
-                for element in val:
-                    elements_str.append(str(element))
-                for i in range(len(elements_str)):
-                    if i < len(elements_str) - 1:
-                        print(elements_str[i] + ",", end=" ")
-                    else:
-                        print(elements_str[i])
-
+        elif key == "Inventory" or key == "Spells":
+            print(key + ":")
+            if value != []:
+                elements = []
+                for element in value:
+                    elements.append(str(element))
+                print(", ".join(elements))
         else:
-            print(val)
+            print(key + ": " + str(value))
 
 
 def modify_money(character, amount):
@@ -46,6 +38,26 @@ def modify_money(character, amount):
 def add_item(character, key, item):
     if key in ["Inventory", "Spells"]:
         character[key].append(item)
+
+
+if __name__ == "__main__":
+    attributes = {
+        "Courage": 8,
+        "Intelligence": 8,
+        "Loyalty": 8,
+        "Ambition": 8
+    }
+
+    character = init_character("Potter", "Harry", attributes)
+
+    display_character(character)
+
+    modify_money(character, -20)
+    add_item(character, "Inventory", "Magic Wand")
+    add_item(character, "Spells", "Expelliarmus")
+
+    print("\nAfter updates:\n")
+    display_character(character)
 
 
 

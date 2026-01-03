@@ -1,16 +1,16 @@
 import json
 import random
-from universe.character import display_character
+from universe.character import add_item, display_character
+from universe.house import update_house_points, display_winning_house
 
-def learn_spells(character, file_path="../data/spells.json"):
-    print("\nYou begin your magic lessons at Hogwarts...")
+def learn_spells(character, file_path="data/spells.json"):
+    print("You begin your magic lessons at Hogwarts...")
 
-    file = open(file_path, "r")
+    file = open(file_path, "r", encoding="utf-8")
     spells = json.load(file)
     file.close()
 
     learned_spells = []
-
     offensive = 0
     defensive = 0
     utility = 0
@@ -18,9 +18,7 @@ def learn_spells(character, file_path="../data/spells.json"):
     while len(learned_spells) < 5:
         spell = random.choice(spells)
 
-        if spell in learned_spells:
-            pass
-        else:
+        if spell not in learned_spells:
             if spell["type"] == "Offensive" and offensive < 1:
                 learned_spells.append(spell)
                 offensive = offensive + 1
@@ -34,26 +32,26 @@ def learn_spells(character, file_path="../data/spells.json"):
     i = 0
     while i < len(learned_spells):
         spell = learned_spells[i]
-        character["spells"].append(spell)
+        character["Spells"].append(spell["name"])
 
         print("You have just learned the spell: " + spell["name"] + " (" + spell["type"] + ")")
         input("Press Enter to continue...")
         i = i + 1
 
-    print("\nYou have completed your basic spell training at Hogwarts!")
+    print("You have completed your basic spell training at Hogwarts!")
     print("Here are the spells you now master:")
 
     i = 0
-    while i < len(character["spells"]):
-        spell = character["spells"][i]
+    while i < len(learned_spells):
+        spell = learned_spells[i]
         print("- " + spell["name"] + " (" + spell["type"] + "): " + spell["description"])
         i = i + 1
 
-def magic_quiz(character, file_path="../data/magic_quiz.json"):
-    print("\nWelcome to the Hogwarts magic quiz!")
+def magic_quiz(character, file_path="data/magic_quiz.json"):
+    print("Welcome to the Hogwarts magic quiz!")
     print("Answer the 4 questions correctly to earn points for your house.")
 
-    file = open(file_path, "r")
+    file = open(file_path, "r", encoding="utf-8")
     questions = json.load(file)
     file.close()
 
@@ -76,25 +74,18 @@ def magic_quiz(character, file_path="../data/magic_quiz.json"):
             score = score + 25
         else:
             print("Wrong answer. The correct answer was: " + q["answer"])
+
         i = i + 1
 
     print("Score obtained: " + str(score) + " points")
-    character["score"] = score
+    return score
 
 def start_chapter_3(character, houses):
-    print("\n--- Chapter 3: Classes and Discovering Hogwarts ---")
+    print("--- Chapter 3: Classes and Discovering Hogwarts ---")
 
     learn_spells(character)
-    magic_quiz(character)
-    house = character["house"]
-    houses[house] = houses[house] + character["score"]
-    best_house = None
-    best_score = -1
-
-    for h in houses:
-        if houses[h] > best_score:
-            best_house = h
-            best_score = houses[h]
-
-    print("\nCurrent leading house: " + best_house + " with " + str(best_score) + " points")
+    quiz_score = magic_quiz(character)
+    house_name = character["House"]
+    update_house_points(houses, house_name, quiz_score)
+    display_winning_house(houses)
     display_character(character)
