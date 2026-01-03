@@ -61,7 +61,7 @@ def magic_quiz(character, file_path="data/magic_quiz.json"):
     while len(selected_questions) < 4:
         question = random.choice(questions)
         if question not in selected_questions:
-            selected_questions.append(question)
+            print(selected_questions.append(question))
 
     i = 0
     while i < len(selected_questions):
