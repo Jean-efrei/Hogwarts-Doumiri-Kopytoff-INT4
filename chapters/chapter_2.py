@@ -75,6 +75,7 @@ def sorting_ceremony(character):
     ]
     print("The sorting ceremony begins in the Great Hall... The Sorting Hat observes you for a long time before asking its questions:")
     my_house = assign_house(character, questions)
+    character ["House"] = my_house
 
 def enter_common_room(character):
     my_house = character["House"]
