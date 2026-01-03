@@ -1,6 +1,8 @@
 from universe import character
+from universe.house import display_winning_house, update_house_points
 from utils.input_utils import load_file
 import random
+from universe.character import display_character
 
 
 def create_team(house, team_data, is_player=False, player=None) :
@@ -78,12 +80,49 @@ def quidditch_match(character, houses) :
     display_team(opposing_house, opposing_team)
     print("Welcome to your first quidditch game ! You will play as a seeker")
     rounds = 0
-    while rounds < 20 :
+    while rounds <= 20 :
         rounds = rounds + 1
         print("Round: ", rounds)
-        attempt_goal(teams_quidditch[player_house]["players"], opposing_team, player_is_seeker=True)
-        attempt_goal(opposing_team, teams_quidditch[opposing_house]["players"])
-        display_score(teams_quidditch[player_house]["players"], opposing_team)
+        attempt_goal(player_team, opposing_team, player_is_seeker=True)
+        attempt_goal(opposing_team, player_team)
+        display_score(player_team, opposing_team)
+
+        golden_snitch = golden_snitch_appears()
+        if golden_snitch == True :
+            print ("The golden snitch just appeared !!! Get ready Seekers !")
+            catching_team = catch_golden_snitch(player_team, opposing_team)
+
+            print(catching_team["name"],"just caught the golden snitch. The game is over")
+            display_score(player_team, opposing_team)
+
+        input("Press Enter to continue...")
+        if rounds == 20 :
+            print("The game is over !")
+            if player_team["score"] > opposing_team["score"] :
+                print(player_team["name"], "win the game !")
+                player_team["score"] = player_team["score"] + 500
+            if player_team["score"] < opposing_team["score"] :
+                print(opposing_team["score"], "win the game !")
+                opposing_team["score"] = opposing_team["score"] + 500
+            else :
+                print("It's a tie ! Nobody wins...")
+        update_house_points(houses, player_team["name"], player_team["score"])
+        update_house_points(houses, opposing_team["name"], player_team["score"])
+        print("Final results")
+        display_score(player_team, opposing_team)
+
+
+
+def start_chapter_4_quidditch(character, houses) :
+    print("Chapter 4 : Quidditch match")
+    quidditch_match(character, houses)
+    print("This is the end of this incredible quidditch game, the atmosphere is amazing here in Hogwarts, what a performance !")
+    print("The winner of the House cup is",)
+    display_winning_house(houses)
+    print("Here are your informations :")
+    display_character(character)
+
+
 
 
 
