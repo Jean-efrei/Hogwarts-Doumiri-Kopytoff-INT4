@@ -1,6 +1,6 @@
 import json
 import random
-from universe.character import add_item, display_character
+from universe.character import houses, display_character
 from universe.house import update_house_points, display_winning_house
 
 def learn_spells(character, file_path="data/spells.json"):
@@ -34,7 +34,7 @@ def learn_spells(character, file_path="data/spells.json"):
         spell = learned_spells[i]
         character["Spells"].append(spell["name"])
 
-        print("You have just learned the spell: " + spell["name"] + " (" + spell["type"] + ")")
+        print("You have just learned the spell: ", spell["name"], " (", spell["type"], ")")
         input("Press Enter to continue...")
         i = i + 1
 
@@ -44,7 +44,7 @@ def learn_spells(character, file_path="data/spells.json"):
     i = 0
     while i < len(learned_spells):
         spell = learned_spells[i]
-        print("- " + spell["name"] + " (" + spell["type"] + "): " + spell["description"])
+        print("- ", spell["name"], " (", spell["type"], "): ", spell["description"])
         i = i + 1
 
 def magic_quiz(character, file_path="data/magic_quiz.json"):
@@ -66,18 +66,35 @@ def magic_quiz(character, file_path="data/magic_quiz.json"):
     i = 0
     while i < len(selected_questions):
         q = selected_questions[i]
-        print(str(i + 1) + ". " + q["question"])
+        print(i + 1, ". " , q["question"])
         answer = input("> ")
 
-        if answer.lower() == q["answer"].lower():
-            print("Correct answer! +25 points for your house.")
-            score = score + 25
+        answer1=""
+        j=0
+        while j < len(answer):
+            c=answer[j]
+            if ord(c)>=ord('A') and ord(c)<= ord('Z'):
+                answer1 += chr(ord(c)+ 32)
+            else:
+                answer1 += c
+            j=j+1
+        answer2=""
+        j=0
+        correct= q["answer"]
+        while j < len(correct):
+            c=correct[j]
+            if ord(c)>=ord('A') and ord(c)<= ord('Z'):
+                answer2 += chr(ord(c)+ 32)
+            else:
+                answer2 += c
+            j=j+1
+        if answer1 == answer2:
+            print("Correct answer! +25 points for your house. ")
         else:
-            print("Wrong answer. The correct answer was: " + q["answer"])
+            print("Wrong answer! The correct answer is: ", q["answer"])
+        i += 1
 
-        i = i + 1
-
-    print("Score obtained: " + str(score) + " points")
+    print("Score obtained: ", score, " points")
     return score
 
 def start_chapter_3(character, houses):
