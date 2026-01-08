@@ -47,7 +47,7 @@ def attempt_goal(attacking_team, defending_team, player_is_seeker=False) :
 
 
 def golden_snitch_appears():
-    snitch = random.randint(1, 6)
+    snitch = random.choice(1, 6)
     if snitch == 6 :
         return True
     else :
