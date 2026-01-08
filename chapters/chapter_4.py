@@ -18,7 +18,7 @@ def create_team(house, team_data, is_player=False, player=None) :
             i = i + 1
         if is_player == True and player is not None:
             new_players = []
-            seeker = player["First Name"] + " " + player["Last Name"] + " (Seeker)"
+            seeker = player["First Name"], " " ,player["Last Name"], " (Seeker)"
             new_players.append(seeker)
             i = 0
             while i < len(players):
@@ -41,10 +41,10 @@ def attempt_goal(attacking_team, defending_team, player_is_seeker=False) :
             scorer = attacking_team["players"][idx]
             attacking_team["score"] = attacking_team["score"] + 10
             attacking_team["goals_scored"] = attacking_team["goals_scored"] + 1
-            print(scorer + " scores a goal for " + attacking_team["name"] + "! (+10 points)")
+            print(scorer, " scores a goal for ", attacking_team["name"], "! (+10 points)")
     else:
         defending_team["goals_blocked"] = defending_team["goals_blocked"] + 1
-        print(defending_team["name"] + " blocks the attack!")
+        print(defending_team["name"], " blocks the attack!")
 
 
 def golden_snitch_appears():
@@ -73,7 +73,7 @@ def display_team(house, team) :
         print(house + " team:")
         i = 0
         while i < len(team["players"]):
-            print("- " + team["players"][i])
+            print("- ", team["players"][i])
             i = i + 1
 
 
@@ -88,20 +88,20 @@ def quidditch_match(character, houses) :
         opposing_house = random.choice(house_names)
         player_team = create_team(player_house, teams_data[player_house]["players"], True, character)
         opposing_team = create_team(opposing_house, teams_data[opposing_house]["players"], False, None)
-        print("Quidditch Match: " + player_house + " vs " + opposing_house + "!")
+        print("Quidditch Match: ", player_house, " vs ", opposing_house, "!")
         display_team(player_house, player_team)
         display_team(opposing_house, opposing_team)
-        print("You are playing for " + player_house + " as the Seeker")
+        print("You are playing for ", player_house, " as the Seeker")
         turn = 1
         match_over = False
         while turn <= 20 and match_over == False:
-            print("━━━ Turn " + str(turn) + " ━━━")
+            print("━━━ Turn " , turn, " ━━━")
             attempt_goal(player_team, opposing_team, True)
             attempt_goal(opposing_team, player_team, False)
             display_score(player_team, opposing_team)
             if golden_snitch_appears() == True:
                 winner_team = catch_golden_snitch(player_team, opposing_team)
-                print("The Golden Snitch has been caught by " + winner_team["name"] + "! (+150 points)")
+                print("The Golden Snitch has been caught by ", winner_team["name"], "! (+150 points)")
                 match_over = True
             input("Press Enter to continue")
             turn = turn + 1
@@ -116,7 +116,7 @@ def quidditch_match(character, houses) :
         if match_winner is None:
             print("Final result: It's a tie!")
         else:
-            print("Final result: Victory for " + match_winner["name"] + "!")
+            print("Final result: Victory for ", match_winner["name"], "!")
             update_house_points(houses, match_winner["name"], 500)
         update_house_points(houses, player_team["name"], player_team["score"])
         update_house_points(houses, opposing_team["name"], opposing_team["score"])

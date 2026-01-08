@@ -1,7 +1,9 @@
+from chapters.chapter_4 import start_chapter_4_quidditch
 from utils.input_utils import ask_number
 from chapters.chapter_1 import start_chapter_1
 from chapters.chapter_2 import start_chapter_2
 from chapters.chapter_3 import start_chapter_3
+from universe.house import houses
 
 def display_main_menu():
     print("")
@@ -10,12 +12,6 @@ def display_main_menu():
     print("2. Exit the game.")
 
 def launch_menu_choice():
-    houses = {
-        "Gryffindor": 0,
-        "Slytherin": 0,
-        "Hufflepuff": 0,
-        "Ravenclaw": 0
-    }
 
     running = True
     while running:
@@ -26,9 +22,10 @@ def launch_menu_choice():
             character = start_chapter_1()
             start_chapter_2(character)
             start_chapter_3(character, houses)
+            start_chapter_4_quidditch(character,houses)
 
             print("")
-            print("End of current content! (Chapter 4 not launched here.)")
+            print("End of current content!")
 
         elif choice == 2:
             print("Thank you for playing. Goodbye!")

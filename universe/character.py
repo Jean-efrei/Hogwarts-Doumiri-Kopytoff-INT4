@@ -19,17 +19,17 @@ def display_character(character):
         if key == "Attributes":
             print(key + ":")
             for sub_key in value:
-                print("- " + str(sub_key) + ": " + str(value[sub_key]))
+                print("- ", sub_key, ": ", value[sub_key])
 
         elif key == "Inventory" or key == "Spells":
             print(key + ":")
             if value != []:
                 elements = []
                 for element in value:
-                    elements.append(str(element))
+                    elements.append(element)
                 print(", ".join(elements))
         else:
-            print(key + ": " + str(value))
+            print(key, ": ", value)
 
 
 def modify_money(character, amount):

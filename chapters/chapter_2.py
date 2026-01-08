@@ -1,4 +1,4 @@
-from utils.input_utils import ask_choice, load_file
+from utils.input_utils import ask_number, load_file
 from universe.house import assign_house
 from universe.character import display_character
 
@@ -15,7 +15,7 @@ def meet_friends(character):
     print("— Hi! I'm Ron Weasley. Mind if I sit with you?")
     print("1. Sure, have a seat!")
     print("2. Sorry, I prefer to travel alone.")
-    choice = int(input("Your choice: "))
+    choice = ask_number("Your choice: ",1, 2)
 
     if choice == 1:
         attributes["Loyalty"] = attributes["Loyalty"] + 1
@@ -28,7 +28,7 @@ def meet_friends(character):
     print("— Hello, I'm Hermione Granger. Have you ever read 'A History of Magic'?")
     print("1. Yes, I love learning new things!")
     print("2. Uh… no, I prefer adventures over books.")
-    choice = int(input("Your choice: "))
+    choice = ask_number("Your choice: ",1, 2)
 
     if choice == 1:
         attributes["Intelligence"] = attributes["Intelligence"] + 1
@@ -42,7 +42,7 @@ def meet_friends(character):
     print("1. Shake his hand politely.")
     print("2. Ignore him completely.")
     print("3. Respond with arrogance.")
-    choice = int(input("Your choice: "))
+    choice = ask_number("Your choice: ",1, 3)
 
     if choice == 1:
         attributes["Ambition"] = attributes["Ambition"] + 1
@@ -82,8 +82,8 @@ def sorting_ceremony(character):
     house_name = assign_house(character, questions)
     character["House"] = house_name
 
-    print("The Sorting Hat exclaims: " + house_name + "!!!")
-    print("You join the " + house_name + " students to loud cheers!")
+    print("The Sorting Hat exclaims: ", house_name, "!!!")
+    print("You join the ", house_name, " students to loud cheers!")
 
 
 def enter_common_room(character):
@@ -92,11 +92,11 @@ def enter_common_room(character):
 
     print("You follow the prefects through the castle corridors...")
 
-    print(house_data[my_house]["emoji"] + " " + house_data[my_house]["description"])
+    print(house_data[my_house]["emoji"], " ", house_data[my_house]["description"])
     print(house_data[my_house]["installation_message"])
 
     colors = ", ".join(house_data[my_house]["colors"])
-    print("Your house colors: " + colors)
+    print("Your house colors: ", colors)
 
 def start_chapter_2(character):
     meet_friends(character)

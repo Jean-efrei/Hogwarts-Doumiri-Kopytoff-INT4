@@ -20,7 +20,7 @@ def main():
     print("=== END ===")
     print("Final houses scores:")
     for h in houses:
-        print(h + ": " + str(houses[h]) + " points")
+        print(h + ": " + houses[h] + " points")
 
 if __name__ == "__main__":
     main()
