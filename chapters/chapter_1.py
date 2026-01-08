@@ -1,6 +1,7 @@
-from utils.input_utils import *
-from universe.character import init_character, display_character, modify_money, add_item
 import json
+from utils.input_utils import ask_text, ask_number, ask_choice, load_file
+from universe.character import init_character, display_character, modify_money, add_item
+
 
 
 
@@ -37,26 +38,21 @@ if __name__ == "__main__":
     introduction()
     hero = create_character()
 
+def receive_letter():
 
-def receive_letter(character):
     print("An owl flies through the window, delivering a letter sealed with the Hogwarts crest...")
-    print("Dear Mr Potter, "
-          "We are pleased to inform you that you have been accepted at Hogwarts School of Witchcraft and Wizardry."
-          "Please find enclosed a list of all necessary books and equipment."
-          "Term begins on 1 September. We await your owl by no later than 31 July."
-          "Yours sincerely,"
-          "Minerva McGonagall")
-    print("Do you accept this invitation and go to Hogwarts ?")
-    print("1 : Yes of course")
-    print("2 : No, what is that weird letter, Wizards don't exist")
-    x = ask_choice("Your choice:", ["1", "2"])
-    if x == "1":
-        print("A strange feeling browses your entire body, it's the beginning of a great adventure. ")
-    else:
-        print(
-            "You tear up your letter, and throw it into the fire place, Uncle Vernon cheers : Finally someone normal in this house !")
-        print("The magical world will never hear about, what a waste of magic ! GAME OVER")
-        exit()
+    print("“Dear Student,")
+    print("We are pleased to inform you that you have been accepted to Hogwarts")
+    print("School of Witchcraft and Wizardry!”\n")
+
+    choice = ask_choice("Do you accept this invitation and go to Hogwarts?",["Yes, of course!", "No, I'd rather stay with Uncle Vernon..."])
+
+    if choice == "No, I'd rather stay with Uncle Vernon...":
+        print("You tear up the letter, and Uncle Vernon cheers:")
+        print("“EXCELLENT! Finally, someone NORMAL in this house!”")
+        print("The magical world will never know you existed... Game over.")
+        exit(0)
+    print("\nYou clutch the letter tightly. Your life will never be the same again...")
 
 
 def meet_hagrid(character) :
@@ -71,69 +67,91 @@ def meet_hagrid(character) :
         print("Hagrid stops : I'm sorry... but I have to insist, after you")
 
 
+
 def buy_supplies(character):
-    inventory = load_file("data/inventory.json")
-    required_items = ["Magic Wand", "Wizard Robe", "Potions Book"]
-    print("Welcome to the Diagon Alley!\n")
-    print("Catalog of available items : ")
-    for key,value in inventory.items():
-        label = "(required)" if value[0] else ""
-        print("{}. {} - {} Galleons {}".format(key, value[0], value[1], label))
-
-    while character["Money"] > 0 and required_items != []:
-        print("You have ", character["Money"], "Galleons.")
-        print("Remaining required items: ", end=' ')
-        for item in required_items:
-            if required_items.index(item) < len(required_items)-1:
-                print(item, end=', ')
-            else :
-                print(item)
-
-        choice = (ask_text("Which item do you want to buy?" ))
-        if inventory[choice][1] > character["Money"] and inventory[choice][0] in required_items:
-            print("You don't have enough money to buy the required item, GAME OVER")
-            exit()
-        elif inventory[choice][0] in required_items :
-            required_items.remove(inventory[choice][0])
-
-        print("You bought: ", choice, "( - ", character[choice][1], ").")
-        modify_money(character, -character[choice][1])
-        add_item(character, "inventory", inventory[choice][0])
-
+    inventory_data = load_file("data/inventory.json")
+    required_items = []
+    for item in inventory_data:
+        value = inventory_data[item]
+        if len(value) > 1 and (value[1] == "required" or value[1] == True):
+            required_items.append(item)
+    print("Welcome to Diagon Alley!")
+    print("Catalog of available items:")
+    item_names = []
+    index = 1
+    for item in inventory_data:
+        value = inventory_data[item]
+        price = value[0]
+        if str(price) == price:
+            number = 0
+            i = 0
+            while i < len(price):
+                number = number * 10 + (ord(price[i]) - ord('0'))
+                i = i + 1
+            price = number
+        text = str(index) + ". " + item + " - " + str(price) + " Galleons"
+        if len(value) > 1 and (value[1] == "required" or value[1] == True):
+            text = text + " (required)"
+        print(text)
+        item_names.append(item)
+        index = index + 1
+    while required_items != []:
+        print("You have " + str(character["Money"]) + " Galleons.")
+        print("Remaining required items: " + ", ".join(required_items))
+        choice = ask_number("Enter the number of the item to buy: ", 1, len(item_names))
+        chosen_item = item_names[choice - 1]
+        already = False
+        if chosen_item in character["Inventory"]:
+            already = True
+        if already == True:
+            print("You already bought: " + chosen_item)
+        else:
+            value = inventory_data[chosen_item]
+            price = value[0]
+            if str(price) == price:
+                number = 0
+                i = 0
+                while i < len(price):
+                    number = number * 10 + (ord(price[i]) - ord('0'))
+                    i = i + 1
+                price = number
+            if character["Money"] < price:
+                print("You do not have enough money. Game over.")
+                exit(0)
+            modify_money(character, -price)
+            add_item(character, "Inventory", chosen_item)
+            print("You bought: " + chosen_item + " (-" + str(price) + " Galleons).")
+            if chosen_item in required_items:
+                required_items.remove(chosen_item)
     print("All required items have been purchased!")
     print("It's time to choose your Hogwarts pet!")
-    print("You have ", character["Money"], "Galleons.")
+    pets = [("Owl", 20), ("Cat", 15), ("Rat", 10), ("Toad", 5)]
+    print("You have " + str(character["Money"]) + " Galleons.")
     print("Available pets:")
-    pets = ["Owl", "Cat", "Rat", "Toad"]
-    prices = [20, 15, 10, 5]
-    for pet in range(len(pets)):
-        print(f"{pet + 1}, {pets[pet]} - {prices[pet]} Galleons")
-        pet_choice = ask_choice("which pet do you want to buy?", pets)
-        if prices[pet] > character["Money"] :
-            print("You don't have enough money to buy a pet, GAME OVER")
-            exit()
-    modify_money(character, prices[pet])
-    add_item(character, "inventory", pets[pet_choice])
-    print(f"You chose : {pets[pet_choice]} (-{prices[pet_choice]})")
-    print("All required items have been successfully purchased! Here is your final inventory")
-    print("")
-    inventory = ", ".join(character["Inventory"])
-    print(inventory)
-    print("Your character profile:")
+    i = 1
+    while i <= len(pets):
+        print(str(i) + ". " + pets[i - 1][0] + " - " + str(pets[i - 1][1]) + " Galleons")
+        i = i + 1
+    pet_choice = ask_number("Which pet do you want? ", 1, len(pets))
+    pet_name = pets[pet_choice - 1][0]
+    pet_price = pets[pet_choice - 1][1]
+    if character["Money"] < pet_price:
+        print("You do not have enough money to buy this pet. Game over.")
+        exit(0)
+    modify_money(character, -pet_price)
+    add_item(character, "Inventory", pet_name)
+    print("You chose: " + pet_name + " (-" + str(pet_price) + " Galleons).")
+    print("All required items have been successfully purchased!")
     display_character(character)
-    return character
+
 
 def start_chapter_1():
     introduction()
     character = create_character()
-    receive_letter(character)
+    receive_letter()
     meet_hagrid(character)
     buy_supplies(character)
-    print("This is the end of the chapter 1, your adventure in Hogwarts is about to begin !!!")
-    display_character(character)
+
+    print("End of Chapter 1! Your adventure begins at Hogwarts...")
     return character
-
-
-
-
 
