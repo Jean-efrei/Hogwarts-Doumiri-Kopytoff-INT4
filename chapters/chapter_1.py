@@ -76,7 +76,6 @@ def buy_supplies(character):
     item_names = []
     i = 1
     while i <= len(inventory_data):
-        # construire la clé "1", "2", ... sans str()
         tmp = i
         key = ""
         if tmp == 0:
@@ -108,7 +107,6 @@ def buy_supplies(character):
         if chosen_item in character["Inventory"]:
             print("You already bought:", chosen_item)
         else:
-            # retrouver le prix à partir du choix
             tmp = choice
             key = ""
             if tmp == 0:
@@ -165,10 +163,6 @@ def buy_supplies(character):
     print("All required items have been successfully purchased! Here is your")
     print("final inventory:")
     display_character(character)
-
-
-
-
 
 def start_chapter_1():
     introduction()

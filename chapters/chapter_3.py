@@ -1,6 +1,6 @@
 import json
 import random
-from universe.character import add_item, display_character
+from universe.character import houses, display_character
 from universe.house import update_house_points, display_winning_house
 
 def learn_spells(character, file_path="data/spells.json"):
