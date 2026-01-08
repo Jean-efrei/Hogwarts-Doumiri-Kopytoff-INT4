@@ -6,15 +6,13 @@ from universe.character import display_character
 
 
 def create_team(house, team_data, is_player=False, player=None) :
-    house = character["House"]
     team = {}
     team["name"] = house
     team["score"] = 0
     team["has_scored"] = 0
     team["has_stopped"] = 0
     team["caught_snitch"] = False
-    teams_quidditch = load_file("data/teams_quidditch.json")
-    team["players"] = teams_quidditch["house"]["players"]
+    team["players"] = team_data
     if is_player == True :
         new_team = []
         team["players"][0] = "{} {} (seeker)".format(player["First Name"], player["Last Name"])
@@ -36,7 +34,7 @@ def attempt_goal(attacking_team, defending_team, player_is_seeker=False) :
             random_player = attacking_team["player"][i]
             print(random_player, "scores a goal for {} (+ 10 points)".format(attacking_team["name"]))
     else:
-        print("{} blocks the attack !".format(defending_team["name"))
+        print("{} blocks the attack !".format(defending_team["name"]))
         blocked_attack = blocked_attack + 1
 
 def golden_snitch_appears():
@@ -47,18 +45,18 @@ def golden_snitch_appears():
         return False
 
 def catch_golden_snitch(e1, e2) :
-    w = random.randint(1, 2)
+    w = random.choice(1, 2)
     if w == 1 :
-        e1["Score"] = e1["Score"] + 150
+        e1["score"] = e1["score"] + 150
         e1 ["caught_snitch"] = True
     else:
-        e2["Score"] = e2["Score"] + 150
+        e2["score"] = e2["score"] + 150
         e2["caught_snitch"] = True
 
 def display_score(e1, e2) :
     print("Current Score :")
-    print(e1["Name"], ": ", e1["Score"], "points")
-    print(e2["Name"], ": ", e2["Score"], "points")
+    print(e1["name"], ": ", e1["score"], "points")
+    print(e2["name"], ": ", e2["score"], "points")
 
 def display_team(house, team) :
     print(house, "team :")
