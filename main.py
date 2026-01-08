@@ -6,6 +6,12 @@ from menu import display_main_menu
 from utils.input_utils import ask_number
 
 def main():
+    houses = {
+        "Gryffindor": 0,
+        "Slytherin": 0,
+        "Hufflepuff": 0,
+        "Ravenclaw": 0
+    }
 
     character = None
     current_chapter = 1

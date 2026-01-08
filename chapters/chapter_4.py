@@ -31,7 +31,7 @@ def create_team(house, team_data, is_player=False, player=None) :
 
 
 def attempt_goal(attacking_team, defending_team, player_is_seeker=False) :
-    chance_goal = random.randint(1, 10)
+    chance_goal = (random.randint(1, 10))
     if chance_goal >= 6:
         if player_is_seeker:
             scorer = attacking_team["players"][0]
