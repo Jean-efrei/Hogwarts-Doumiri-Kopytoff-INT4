@@ -27,6 +27,7 @@ def create_character():
         "Courage": courage,
         "Intelligence": intelligence,
         "Loyalty": loyalty,
+        
         "Ambition": ambition
     }
 
